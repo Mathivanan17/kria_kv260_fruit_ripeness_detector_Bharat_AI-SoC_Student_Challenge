@@ -9,18 +9,16 @@ Edge AI fruit ripeness detector built for the Kria KV260. Features an INT8-quant
 [![arm developer labs](https://img.shields.io/badge/arm_developer_Labs-blueviolet)](https://arm-university.github.io/Arm-Developer-Labs/Challenge_Page.html)
 [![Hardware](https://img.shields.io/badge/Hardware-Kria%20KV260-orange)](#)
 [![Model](https://img.shields.io/badge/Model-MobileNetV2%20INT8-blue)](#)
-[![Lang](https://img.shields.io/badge/Language-C++%20%7C%20OpenCV-darkred)](#)
+[![Lang](https://img.shields.io/badge/Language-C++%20%7C%20OpenCV-purple)](#)
 [![Status](https://img.shields.io/badge/Status-Completed-brightgreen)](#)
 
-🎥 **[Watch our 2-Minute Demo Video Here](INSERT_YOUTUBE_LINK_HERE)**
+🎥 **[Watch our 2-Minute Demo Video Here](#)** *(Link pending)*
 
 ---
 
 ## 🧠 Introduction
 
-Deploying deep learning models on edge devices requires a careful balance of compute capability, power consumption, and latency. This project explores a **Hardware/Software Co-Design** approach to build a real-time fruit ripeness classification system. 
-
-Instead of relying solely on the CPU (which introduces high latency) or moving the entire pipeline to the FPGA (which lacks control flexibility), this system partitions the workload. It leverages the ARM processor for dynamic data preparation and the Xilinx Deep Learning Processor Unit (DPU) for heavy convolutional acceleration, perfectly aligning with modern edge-computing paradigms.
+Deploying deep learning models on edge devices requires a careful balance of compute capability, power consumption, and latency. This project explores a **Hardware/Software Co-Design** approach to build a real-time fruit ripeness classification system. Instead of relying solely on the CPU (which introduces high latency) or moving the entire pipeline to the FPGA (which lacks control flexibility), this system partitions the workload. It leverages the ARM processor for dynamic data preparation and the Xilinx Deep Learning Processor Unit (DPU) for heavy convolutional acceleration, aligning perfectly with modern edge-computing paradigms.
 
 ## 🎯 Project Objective
 
@@ -39,7 +37,6 @@ The system classifies inputs into four distinct ripeness stages:
 [![Overripe](https://img.shields.io/badge/Class-Overripe-orange)](#)
 [![Rotten](https://img.shields.io/badge/Class-Rotten-darkred)](#)
 
-### 📋 Class Summary
 | Ripeness Stage | Description |
 |--------------|-------------|
 | **Unripe** | Early stage, firm texture, typically green coloration. |
@@ -51,32 +48,22 @@ The system classifies inputs into four distinct ripeness stages:
 
 This project follows a strict **Co-Design philosophy**: *Let the CPU handle control; let the FPGA handle math.*
 
-* **ARM Cortex-A53 (Software):** Handles OpenCV camera capture, ROI extraction, BGR-to-RGB conversion, INT8 quantization, and post-processing (Dequantization, Softmax, Argmax).
-* **FPGA Fabric / DPU (Hardware):** Executes the computationally intensive convolution and pooling layers of the INT8 quantized MobileNetV2 model.
+* **ARM Cortex-A53 (Software):** Handles OpenCV camera capture, ROI extraction, BGR-to-RGB conversion, INT8 quantization, and post-processing (Dequantization, Softmax, Argmax, Temporal Smoothing).
+* **FPGA Fabric / DPU (Hardware):** Executes the computationally intensive convolution layers of the INT8 quantized MobileNetV2 model.
 
-## ⚡ Key Optimizations
+## ⚡ Key Software Optimizations
 
-To achieve maximum efficiency on the KV260, we implemented custom ARM-side logic before interacting with the DPU:
-- **ROI-Based Inference Skipping:** The system calculates pixel differences between frames. If the Region of Interest (ROI) hasn't significantly changed, DPU inference is skipped, saving massive amounts of compute power.
-- **Temporal Consistency Filtering:** A sliding-window majority vote is applied over the last 5 frames to prevent UI flickering and ensure rock-solid, stable predictions.
+To achieve maximum efficiency on the KV260, custom ARM-side logic was implemented prior to DPU interaction:
+- **ROI-Based Inference Skipping:** The system calculates pixel differences between frames. If the Region of Interest (ROI) hasn't significantly changed, DPU inference is bypassed.
+- **Temporal Consistency Filtering:** A sliding-window majority vote is applied over the last 5 frames to prevent UI flickering and ensure stable predictions.
 - **End-to-End INT8 Pipeline:** Preprocessing outputs are quantized to exactly match the DPU's INT8 expectations, eliminating redundant datatype conversions on the FPGA.
 
 ## 📁 Repository Structure
 
 ```text
-kria-kv260-fruit-ripeness/
-├── README.md                 # Main project documentation
-├── docs/                     
-│   └── Final_Report.pdf      # Detailed methodology, results, and resource utilization
-├── src/                      
-│   ├── arm_pipeline/         # C++ source code for ARM processor
-│   │   ├── main.cpp
-│   │   ├── preprocess_int8.cpp
-│   │   ├── postprocess_softmax.cpp
-│   │   ├── temporal_filter.cpp
-│   │   ├── roi_crop.cpp
-│   │   └── dpu_inference.cpp
-├── models/                   
-│   ├── fruit_net.xmodel      # Compiled model for Xilinx DPU
-│   └── quantized.tflite      # Original quantized TFLite model
-└── assets/                   # Images and diagrams for documentation
+KV260-Fruit-Ripeness-Detection/
+├── docs/                     # Detailed methodology and project report
+├── src/                      # C++ source code for the ARM processor
+├── models/                   # Compiled DPU models and TFLite variants
+├── results/                  # Evaluation metrics and latency results
+└── README.md                 # Main project documentation
