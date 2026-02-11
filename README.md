@@ -7,7 +7,7 @@ Edge AI fruit ripeness detector built for the Kria KV260. Features an INT8-quant
 **Platform:** Xilinx Kria KV260 Vision AI Starter Kit • **Framework:** Vitis AI (VART)
 
 [![Bharat AI-SoC Student Challenge](https://img.shields.io/badge/Bharat_AI_SoC_Student_Challenge-blueviolet)](https://arm-university.github.io/Arm-Developer-Labs/)
-[![arm developer labs](https://img.shields.io/badge/arm_developer_labs-darkindigo)](https://arm-university.github.io/Arm-Developer-Labs/)
+[![arm developer labs](https://img.shields.io/badge/arm_developer_labs-indigo)](https://arm-university.github.io/Arm-Developer-Labs/)
 [![Hardware](https://img.shields.io/badge/Hardware-Kria%20KV260-orange)](#)
 [![Model](https://img.shields.io/badge/Model-MobileNetV2%20INT8-blue)](#)
 [![Lang](https://img.shields.io/badge/Language-C++%20%7C%20OpenCV-purple)](#)
